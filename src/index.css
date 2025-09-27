@@ -1,0 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* MailHub Gaming Platform Design System */
+@layer base {
+  :root {
+    /* Core Gaming Dark Theme */
+    --background: 220 13% 6%;
+    --foreground: 210 40% 98%;
+
+    /* Card system for gaming UI */
+    --card: 220 13% 10%;
+    --card-foreground: 210 40% 98%;
+    --card-hover: 220 13% 12%;
+
+    /* Gaming purple primary palette */
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
+    --primary-hover: 262 83% 65%;
+    --primary-glow: 262 83% 58%;
+
+    /* Gaming secondary accents */
+    --secondary: 220 13% 16%;
+    --secondary-foreground: 210 40% 98%;
+    --secondary-hover: 220 13% 20%;
+
+    /* Muted for subtle elements */
+    --muted: 220 13% 14%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    /* Gaming accent colors */
+    --accent: 262 83% 58%;
+    --accent-foreground: 210 40% 98%;
+
+    /* Status colors */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 210 40% 98%;
+
+    /* Gaming gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(282 83% 68%));
+    --gradient-secondary: linear-gradient(135deg, hsl(220 13% 16%), hsl(220 13% 20%));
+    --gradient-hero: linear-gradient(135deg, hsl(262 83% 15% / 0.8), hsl(282 83% 25% / 0.6));
+    --gradient-gaming: linear-gradient(135deg, hsl(262 83% 58% / 0.1), hsl(282 83% 68% / 0.2));
+    --gradient-card: linear-gradient(135deg, hsl(220 13% 10% / 0.95), hsl(220 13% 12% / 0.9));
+
+    /* Gaming shadows and glows */
+    --shadow-gaming: 0 20px 40px -10px hsl(262 83% 58% / 0.3);
+    --shadow-card: 0 8px 32px -8px hsl(220 13% 6% / 0.8);
+    --shadow-elegant: 0 12px 24px -4px hsl(262 83% 58% / 0.2);
+    --glow-primary: 0 0 30px hsl(262 83% 58% / 0.4);
+    --glow-hover: 0 0 40px hsl(262 83% 58% / 0.6);
+    --glow-intense: 0 0 60px hsl(262 83% 58% / 0.8);
+
+    /* Border and input */
+    --border: 220 13% 20%;
+    --input: 220 13% 16%;
+    --input-border: 220 13% 24%;
+    --ring: 262 83% 58%;
+
+    /* Gaming UI radius */
+    --radius: 0.75rem;
+
+    /* Gaming badges and indicators */
+    --badge-unread: 262 83% 58%;
+    --badge-star: 45 93% 47%;
+    --badge-success: 142 76% 36%;
+
+    /* Gaming platform colors */
+    --steam: 213 100% 47%;
+    --epic: 215 100% 50%;
+    --playstation: 220 100% 50%;
+    --xbox: 120 100% 30%;
+    --origin: 25 100% 50%;
+    --battlenet: 215 25% 65%;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Gaming Button Variants */
+  .btn-gaming {
+    @apply bg-gradient-to-r from-primary to-primary-hover text-primary-foreground font-semibold;
+    @apply px-6 py-3 rounded-xl transition-all duration-300;
+    @apply hover:shadow-[var(--glow-hover)] hover:scale-105;
+    @apply focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  .btn-gaming-outline {
+    @apply border-2 border-primary text-primary bg-transparent font-semibold;
+    @apply px-6 py-3 rounded-xl transition-all duration-300;
+    @apply hover:bg-primary hover:text-primary-foreground hover:shadow-[var(--glow-primary)];
+    @apply focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  .btn-gaming-secondary {
+    @apply bg-secondary text-secondary-foreground font-semibold;
+    @apply px-6 py-3 rounded-xl transition-all duration-300;
+    @apply hover:bg-secondary-hover hover:shadow-[var(--shadow-card)];
+    @apply focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  /* Gaming Card Components */
+  .card-gaming {
+    @apply bg-card border border-border rounded-xl p-6;
+    @apply shadow-[var(--shadow-card)] transition-all duration-300;
+    @apply hover:bg-card-hover hover:shadow-[var(--shadow-elegant)];
+    @apply backdrop-blur-sm;
+  }
+
+  .card-gaming-feature {
+    @apply bg-gradient-to-br from-card to-card-hover border border-border rounded-xl p-6;
+    @apply shadow-[var(--shadow-card)] transition-all duration-500;
+    @apply hover:shadow-[var(--shadow-gaming)] hover:scale-[1.02] hover:border-primary/30;
+    @apply backdrop-blur-sm relative overflow-hidden;
+  }
+
+  /* Gaming Navigation */
+  .nav-gaming {
+    @apply flex items-center space-x-1 px-4 py-2 rounded-xl font-medium transition-all duration-300;
+    @apply hover:bg-muted hover:text-foreground;
+  }
+
+  .nav-gaming-active {
+    @apply bg-primary text-primary-foreground font-semibold;
+    @apply shadow-[var(--glow-primary)];
+  }
+
+  /* Gaming Badge System */
+  .badge-unread {
+    @apply bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded-full;
+    @apply shadow-[var(--glow-primary)];
+  }
+
+  .badge-star {
+    @apply bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full;
+  }
+
+  .badge-platform {
+    @apply px-2 py-1 rounded-md text-xs font-semibold text-white;
+  }
+
+  /* Gaming Input Components */
+  .input-gaming {
+    @apply bg-input border border-input-border text-foreground rounded-xl px-4 py-3;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary;
+    @apply transition-all duration-300 placeholder:text-muted-foreground;
+  }
+
+  /* Gaming Animations */
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite alternate;
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+  }
+
+  /* Gaming Hover Effects */
+  .hover-lift {
+    @apply transition-all duration-500 hover:scale-105 hover:shadow-[var(--shadow-gaming)];
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-[var(--glow-hover)];
+  }
+
+  .hover-intense {
+    @apply transition-all duration-300 hover:shadow-[var(--glow-intense)] hover:scale-110;
+  }
+}
+
+@layer utilities {
+  /* Gaming Background Utilities */
+  .bg-gaming-gradient {
+    background: var(--gradient-primary);
+  }
+
+  .bg-gaming-hero {
+    background: var(--gradient-hero);
+  }
+
+  .bg-gaming-subtle {
+    background: var(--gradient-gaming);
+  }
+
+  /* Gaming Text Utilities */
+  .text-gaming {
+    color: hsl(var(--primary));
+  }
+
+  .text-gaming-glow {
+    color: hsl(var(--primary));
+    text-shadow: 0 0 10px hsl(var(--primary-glow) / 0.5);
+  }
+
+  /* Gaming Shadow Utilities */
+  .shadow-gaming {
+    box-shadow: var(--shadow-gaming);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--glow-primary);
+  }
+
+  /* Gaming Border Utilities */
+  .border-gaming {
+    border-color: hsl(var(--primary));
+  }
+
+  .border-gaming-muted {
+    border-color: hsl(var(--border));
+  }
+}
+
+/* Gaming Keyframe Animations */
+@keyframes glow {
+  from {
+    box-shadow: 0 0 30px hsl(var(--primary-glow) / 0.4);
+    text-shadow: 0 0 20px hsl(var(--primary-glow) / 0.6);
+  }
+  to {
+    box-shadow: 0 0 50px hsl(var(--primary-glow) / 0.8);
+    text-shadow: 0 0 30px hsl(var(--primary-glow) / 1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
