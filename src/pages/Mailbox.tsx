@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useEmailApi } from '@/hooks/useEmailApi';
-import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -79,106 +78,192 @@ export const Mailbox = () => {
   const selectedEmailData = selectedEmail ? emails.find(e => e.id === selectedEmail) : null;
 
   return (
-    <Layout showFooter={false} className="flex-1">
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
+      {/* Single Sticky Header */}
+      <header className="bg-card/95 backdrop-blur-md border-b border-border/50 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center space-x-2">
+              <Mail className="w-8 h-8 text-primary" />
+              <span className="text-2xl font-bold text-primary">MailHub</span>
+            </div>
 
-        {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 sm:py-4">
-          <div className="space-y-3 sm:space-y-4">
-        {/* Welcome Promo Banner */}
-        {showPromoBanner && (
-          <div className="bg-gradient-to-r from-primary/20 via-primary/10 to-primary/5 border border-primary/30 rounded-xl p-4 sm:p-6 animate-fade-in">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-primary/30 rounded-xl">
-                  <Gift className="w-6 h-6 text-primary" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-lg font-bold text-foreground mb-1">
-                    Welcome to MailHub 🎉
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Nikmati inbox cepat & cek promo spesial di store kami!
-                  </p>
-                </div>
+            {/* Navigation */}
+            <nav className="hidden md:flex items-center space-x-2">
+              <Link
+                to="/mailbox"
+                className="nav-gaming nav-gaming-active relative"
+              >
+                <Mail className="w-5 h-5 mr-2" />
+                <span>Mail</span>
+                {stats.unread > 0 && (
+                  <span className="badge-unread ml-2 animate-pulse">{stats.unread}</span>
+                )}
+              </Link>
+              <Link to="/store" className="nav-gaming">
+                <span>Gaming</span>
+              </Link>
+              <Link to="/blog" className="nav-gaming">
+                <span>Blog</span>
+              </Link>
+              <Link to="/community" className="nav-gaming">
+                <span>Community</span>
+              </Link>
+            </nav>
+
+            {/* Search and Actions */}
+            <div className="flex items-center space-x-3">
+              {/* Search Bar */}
+              <div className="hidden lg:flex items-center relative">
+                <Search className="w-5 h-5 absolute left-3 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="input-gaming pl-10 w-64 xl:w-80 text-sm"
+                />
               </div>
+
+              {/* Action Icons */}
               <div className="flex items-center space-x-2">
-                <Link to="/store">
-                  <Button variant="default" className="bg-primary hover:bg-primary/80">
-                    <span className="hidden sm:inline">Kunjungi Store</span>
-                    <span className="sm:hidden">Store</span>
-                  </Button>
-                </Link>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleCloseBanner}
-                  className="text-muted-foreground hover:text-foreground"
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                  <Search className="w-5 h-5 md:hidden" />
+                </Button>
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                  <span className="text-sm">🔔</span>
+                </Button>
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                  <span className="text-sm">⚙️</span>
+                </Button>
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                  <span className="text-sm">👤</span>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={handleSignOut}
+                  className="text-sm btn-gaming-outline hidden md:flex"
                 >
-                  <X className="w-4 h-4" />
+                  Logout
                 </Button>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      </header>
 
-            {/* Email Interface */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
-              {/* Simplified Sidebar - Desktop Only */}
-              <div className="hidden lg:block lg:col-span-1">
-                <Card className="card-gaming h-fit">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center justify-between">
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 sm:py-4">
+        <div className="space-y-3 sm:space-y-4">
+          {/* Welcome Promo Banner */}
+          {showPromoBanner && (
+            <div className="bg-gradient-to-r from-primary/20 via-primary/10 to-primary/5 border border-primary/30 rounded-xl p-4 sm:p-6 animate-fade-in">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-primary/30 rounded-xl">
+                    <Gift className="w-6 h-6 text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-bold text-foreground mb-1">
+                      Welcome to MailHub 🎉
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Nikmati inbox cepat & cek promo spesial di store kami!
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Link to="/store">
+                    <Button variant="default" className="bg-primary hover:bg-primary/80">
+                      <span className="hidden sm:inline">Kunjungi Store</span>
+                      <span className="sm:hidden">Store</span>
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleCloseBanner}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Email Interface */}
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6">
+            {/* Left Sidebar - Desktop Only */}
+            <div className="hidden lg:block lg:col-span-1">
+              <Card className="card-gaming h-[calc(100vh-120px)]">
+                <CardHeader className="pb-4">
+                  <Button className="w-full btn-gaming mb-4">
+                    + Compose
+                  </Button>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex items-center justify-between p-2 bg-primary/10 rounded-lg border border-primary/20">
+                    <div className="flex items-center space-x-2">
+                      <Mail className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-medium">Inbox</span>
+                    </div>
+                    <Badge className="badge-unread">{stats.unread}</Badge>
+                  </div>
+                  <div className="flex items-center space-x-2 p-2 text-muted-foreground hover:text-foreground cursor-pointer">
+                    <span className="text-sm">📤</span>
+                    <span className="text-sm">Sent</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 text-muted-foreground hover:text-foreground cursor-pointer">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm">⭐</span>
+                      <span className="text-sm">Starred</span>
+                    </div>
+                    <Badge variant="secondary" className="text-xs">3</Badge>
+                  </div>
+                  <div className="flex items-center space-x-2 p-2 text-muted-foreground hover:text-foreground cursor-pointer">
+                    <span className="text-sm">📁</span>
+                    <span className="text-sm">Archive</span>
+                  </div>
+                  <div className="flex items-center space-x-2 p-2 text-muted-foreground hover:text-foreground cursor-pointer">
+                    <span className="text-sm">🗑️</span>
+                    <span className="text-sm">Trash</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Email List */}
+            <div className="flex-1 lg:col-span-4">
+              <Card className="card-gaming h-[calc(100vh-120px)] flex flex-col">
+                <CardHeader className="pb-4">
+                  <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
+                    <CardTitle className="flex items-center space-x-3 text-xl">
                       <div className="flex items-center space-x-2">
-                        <Mail className="w-5 h-5 text-primary" />
+                        <Mail className="w-6 h-6 text-primary lg:hidden" />
                         <span>Inbox</span>
                       </div>
-                      {stats.unread > 0 && (
-                        <Badge className="badge-unread animate-pulse">
-                          {stats.unread}
-                        </Badge>
-                      )}
+                      <Badge variant="secondary" className="text-xs animate-pulse">
+                        {stats.total} emails
+                      </Badge>
                     </CardTitle>
-                    {lastRefresh && (
-                      <p className="text-xs text-muted-foreground">
-                        Last updated: {lastRefresh.toLocaleTimeString()}
-                      </p>
-                    )}
-                  </CardHeader>
-                </Card>
-              </div>
-
-              {/* Email List */}
-              <div className="flex-1 lg:col-span-3">
-                <Card className="card-gaming h-[calc(100vh-120px)] sm:h-[calc(100vh-160px)] lg:h-[calc(100vh-180px)] flex flex-col">
-                  <CardHeader className="pb-4">
-                    <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
-                      <CardTitle className="flex items-center space-x-3 text-xl">
-                        <div className="flex items-center space-x-2">
-                          <Mail className="w-6 h-6 text-primary lg:hidden" />
-                          <span>Inbox</span>
-                        </div>
-                        <Badge variant="secondary" className="text-xs animate-pulse">
-                          {stats.total} emails
-                        </Badge>
-                      </CardTitle>
-                      
-                      {/* Search Bar */}
-                      <div className="flex items-center space-x-2 w-full sm:w-auto">
-                        <div className="relative flex-1 sm:flex-none">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                          <Input
-                            placeholder="Search emails..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="input-gaming pl-10 w-full sm:w-64"
-                          />
-                        </div>
+                    
+                    {/* Search Bar */}
+                    <div className="flex items-center space-x-2 w-full sm:w-auto">
+                      <div className="relative flex-1 sm:flex-none">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Search emails..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="input-gaming pl-10 w-full sm:w-64"
+                        />
                       </div>
                     </div>
-                  </CardHeader>
-                
-                <CardContent className="flex-1 overflow-hidden">
+                  </div>
+                </CardHeader>
+              
+                <CardContent className="flex-1 overflow-hidden p-4">
                   {error && (
                     <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
                       <p className="text-sm text-destructive">{error}</p>
@@ -305,7 +390,7 @@ export const Mailbox = () => {
                     </div>
                   ) : (
                     // Email List
-                    <div className="h-full overflow-y-auto space-y-2">
+                    <div className="h-full overflow-y-auto space-y-3">
                       {loading && filteredEmails.length === 0 ? (
                         <div className="flex items-center justify-center h-32">
                           <RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" />
@@ -319,7 +404,7 @@ export const Mailbox = () => {
                             <div
                             key={email.id}
                             onClick={() => handleEmailClick(email.id)}
-                            className={`p-3 sm:p-4 rounded-xl border transition-all duration-200 hover:bg-muted cursor-pointer ${
+                            className={`p-4 rounded-xl border transition-all duration-200 hover:bg-muted cursor-pointer ${
                               !email.isRead 
                                 ? 'border-primary bg-primary/5 hover:bg-primary/10' 
                                 : 'border-border bg-transparent'
@@ -332,10 +417,10 @@ export const Mailbox = () => {
                                   <img
                                     src={email.sender.avatar}
                                     alt="Sender"
-                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-border"
+                                    className="w-10 h-10 rounded-full border border-border"
                                   />
                                 ) : (
-                                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-secondary rounded-full flex items-center justify-center text-secondary-foreground text-xs sm:text-sm font-semibold">
+                                  <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-secondary-foreground text-sm font-semibold">
                                     {email.sender.name.charAt(0)}
                                   </div>
                                 )}
@@ -344,28 +429,28 @@ export const Mailbox = () => {
                               {/* Email Content */}
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-start justify-between">
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-center space-x-2 mb-1">
-                                      <span className={`text-sm sm:text-base font-medium truncate ${!email.isRead ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                  <div className="flex-1 min-w-0 space-y-2">
+                                    <div className="flex items-center space-x-2">
+                                      <span className={`text-base font-medium ${!email.isRead ? 'text-foreground' : 'text-muted-foreground'}`}>
                                         {email.sender.name}
                                       </span>
                                        {!email.isRead && (
                                          <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 animate-pulse"></div>
                                        )}
                                        {email.attachments && email.attachments.length > 0 && (
-                                         <Paperclip className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground flex-shrink-0" />
+                                         <Paperclip className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                                        )}
                                     </div>
-                                    <p className={`text-sm sm:text-base truncate mb-1 ${!email.isRead ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                                    <p className={`text-base mb-2 ${!email.isRead ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
                                       {email.subject}
                                     </p>
-                                     <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-2 sm:mb-0 overflow-hidden">
+                                     <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
                                        {email.preview}
                                      </p>
                                   </div>
 
                                   {/* Actions */}
-                                  <div className="flex flex-col items-end space-y-1 ml-2">
+                                  <div className="flex flex-col items-end space-y-2 ml-4">
                                     <span className="text-xs text-muted-foreground whitespace-nowrap">
                                       {new Date(email.timestamp).toLocaleDateString('id-ID', { 
                                         month: 'short', 
@@ -375,7 +460,7 @@ export const Mailbox = () => {
                                     </span>
                                      <div className="flex items-center">
                                        {email.otpCodes && email.otpCodes.length > 0 && (
-                                         <Badge className="badge-unread text-xs mr-2">
+                                         <Badge className="badge-unread text-xs">
                                            OTP
                                          </Badge>
                                        )}
@@ -390,12 +475,11 @@ export const Mailbox = () => {
                     </div>
                   )}
                 </CardContent>
-                </Card>
-              </div>
+              </Card>
             </div>
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
