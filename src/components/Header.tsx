@@ -9,7 +9,7 @@ export const Header = () => {
 
   const navItems = [
     { name: 'Mail', path: '/mailbox', icon: Mail, count: 12, requiresAuth: true },
-    { name: 'Gaming', path: '/store', icon: null },
+    { name: 'Store', path: '/store', icon: null },
     { name: 'Blog', path: '/blog', icon: null },
     { name: 'Community', path: '/community', icon: null },
   ];

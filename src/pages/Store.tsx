@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ShoppingCart, Star, Trophy, Users, Clock, Eye, Filter } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 interface GameAccount {
   id: string;
@@ -123,6 +124,13 @@ export const Store = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      
+      {/* Quick Mailbox Access */}
+      <div className="md:hidden bg-muted/50 border-b border-border px-4 py-2">
+        <Link to="/mailbox" className="text-sm text-primary hover:text-primary-hover">
+          ← Back to Mailbox
+        </Link>
+      </div>
       
       {/* Hero Section */}
       <section className="relative bg-gaming-hero py-20 px-4 sm:px-6 lg:px-8">

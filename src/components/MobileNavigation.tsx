@@ -58,23 +58,17 @@ export const MobileNavigation = () => {
 
   return (
     <>
-      {/* Connection Status Indicator - Mobile */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-        <div className="flex items-center justify-between px-4 py-2 text-sm">
-          <div className="flex items-center space-x-2">
-            {isOnline ? (
-              <Wifi className="w-4 h-4 text-success" />
-            ) : (
-              <WifiOff className="w-4 h-4 text-destructive" />
-            )}
-            <span className={isOnline ? 'text-success' : 'text-destructive'}>
-              {isOnline ? 'Online' : 'Offline'}
-            </span>
-            {retryCount > 0 && (
-              <span className="text-warning text-xs">
-                Retry {retryCount}/3
+      {/* Minimalist Status Bar - Mobile */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50">
+        <div className="flex items-center justify-between px-4 py-3 text-sm">
+          <div className="flex items-center space-x-3">
+            <span className="text-xl font-bold text-gaming-glow">MailHub</span>
+            <div className="flex items-center space-x-1">
+              <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+              <span className={`text-xs font-medium ${isOnline ? 'text-green-500' : 'text-red-500'}`}>
+                {isOnline ? 'Online' : 'Offline'}
               </span>
-            )}
+            </div>
           </div>
           
           {/* Quick Login/Profile Access */}

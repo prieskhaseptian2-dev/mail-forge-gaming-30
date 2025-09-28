@@ -88,9 +88,13 @@ export const Mailbox = () => {
               <div className="flex items-center space-x-3">
                 <Mail className="w-8 h-8 text-primary animate-glow" />
                 <h1 className="text-2xl font-bold text-gaming-glow">MailHub</h1>
-                <Badge variant={isOnline ? "default" : "destructive"} className="text-xs animate-pulse">
-                  {isOnline ? 'Online' : 'Offline'}
-                </Badge>
+                {/* Green Online Status Indicator */}
+                <div className="flex items-center space-x-2">
+                  <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+                  <Badge variant={isOnline ? "default" : "destructive"} className="text-xs bg-green-500/20 text-green-400 border-green-500/30">
+                    {isOnline ? 'Online' : 'Offline'}
+                  </Badge>
+                </div>
               </div>
               
               <div className="flex items-center space-x-4">
@@ -135,42 +139,38 @@ export const Mailbox = () => {
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="space-y-4 sm:space-y-6">
-            {/* Promo Banner */}
-            {showPromoBanner && (
-              <Card className="card-gaming-feature border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 animate-fade-in">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-4 flex-1">
-                      <div className="p-3 bg-primary rounded-xl shadow-glow animate-float">
-                        <Gift className="w-6 h-6 text-primary-foreground" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-bold text-foreground mb-2">
-                          Welcome to MailHub 🎉
-                        </h3>
-                        <p className="text-sm text-muted-foreground mb-3 sm:mb-4">
-                          Nikmati inbox cepat & cek promo spesial di store kami!
-                        </p>
-                        <Link to="/store">
-                          <Button className="btn-gaming text-sm hover-glow">
-                            <ShoppingBag className="w-4 h-4 mr-2" />
-                            Kunjungi Store
-                          </Button>
-                        </Link>
-                      </div>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleCloseBanner}
-                      className="text-muted-foreground hover:text-foreground"
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+        {/* Minimalist Promo Banner */}
+        {showPromoBanner && (
+          <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-lg p-3 sm:p-4 animate-fade-in">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-primary/20 rounded-lg">
+                  <Gift className="w-4 h-4 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground">
+                    Welcome to MailHub – Check out our store for exclusive deals!
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Link to="/store">
+                  <Button size="sm" variant="outline" className="text-xs hidden sm:flex">
+                    Visit Store
+                  </Button>
+                </Link>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleCloseBanner}
+                  className="text-muted-foreground hover:text-foreground p-1"
+                >
+                  <X className="w-3 h-3" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
             {/* Email Interface */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -200,7 +200,7 @@ export const Mailbox = () => {
 
               {/* Email List */}
               <div className="flex-1 lg:col-span-3">
-                <Card className="card-gaming h-[calc(100vh-200px)] sm:h-[calc(100vh-250px)] flex flex-col">
+                <Card className="card-gaming h-[calc(100vh-180px)] sm:h-[calc(100vh-220px)] flex flex-col">
                   <CardHeader className="pb-4">
                     <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
                       <CardTitle className="flex items-center space-x-3 text-xl">
