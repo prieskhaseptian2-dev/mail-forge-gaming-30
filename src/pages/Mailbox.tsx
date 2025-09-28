@@ -81,64 +81,10 @@ export const Mailbox = () => {
   return (
     <Layout showFooter={false} className="flex-1">
       <div className="min-h-screen bg-background">
-        {/* Header */}
-        <header className="border-b border-border bg-card/95 backdrop-blur-md sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center space-x-3">
-                <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-primary animate-glow" />
-                <h1 className="text-lg sm:text-2xl font-bold text-primary">MailHub</h1>
-                <div className="hidden sm:flex items-center space-x-2">
-                  <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-primary animate-pulse' : 'bg-muted-foreground'}`}></div>
-                  <span className={`text-xs ${isOnline ? 'text-primary' : 'text-muted-foreground'}`}>
-                    {isOnline ? 'Online' : 'Offline'}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2 sm:space-x-4">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleRefresh}
-                  disabled={loading}
-                  className="hover-glow"
-                >
-                  <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                  <span className="hidden sm:inline sm:ml-2">Refresh</span>
-                </Button>
-                
-                <div className="hidden sm:flex items-center space-x-2">
-                  {user?.profile?.avatar ? (
-                    <img
-                      src={user.profile.avatar}
-                      alt="Profile"
-                      className="w-6 h-6 rounded-full border border-border"
-                    />
-                  ) : (
-                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-semibold">
-                      {user?.name?.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <span className="text-sm font-medium text-foreground">{user?.name}</span>
-                </div>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleSignOut}
-                  className="btn-gaming-outline text-xs sm:text-sm"
-                >
-                  Logout
-                </Button>
-              </div>
-            </div>
-          </div>
-        </header>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="space-y-4 sm:space-y-6">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 sm:py-4">
+          <div className="space-y-3 sm:space-y-4">
         {/* Welcome Promo Banner */}
         {showPromoBanner && (
           <div className="bg-gradient-to-r from-primary/20 via-primary/10 to-primary/5 border border-primary/30 rounded-xl p-4 sm:p-6 animate-fade-in">
@@ -204,7 +150,7 @@ export const Mailbox = () => {
 
               {/* Email List */}
               <div className="flex-1 lg:col-span-3">
-                <Card className="card-gaming h-[calc(100vh-140px)] sm:h-[calc(100vh-200px)] lg:h-[calc(100vh-220px)] flex flex-col">
+                <Card className="card-gaming h-[calc(100vh-120px)] sm:h-[calc(100vh-160px)] lg:h-[calc(100vh-180px)] flex flex-col">
                   <CardHeader className="pb-4">
                     <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
                       <CardTitle className="flex items-center space-x-3 text-xl">
@@ -413,9 +359,9 @@ export const Mailbox = () => {
                                     <p className={`text-sm sm:text-base truncate mb-1 ${!email.isRead ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
                                       {email.subject}
                                     </p>
-                                    <p className="text-xs sm:text-sm text-muted-foreground truncate mb-2 sm:mb-0">
-                                      {email.preview}
-                                    </p>
+                                     <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-2 sm:mb-0 overflow-hidden">
+                                       {email.preview}
+                                     </p>
                                   </div>
 
                                   {/* Actions */}

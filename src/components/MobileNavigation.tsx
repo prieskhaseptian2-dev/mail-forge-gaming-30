@@ -146,7 +146,7 @@ export const MobileNavigation = () => {
       </nav>
 
       {/* Spacer for mobile navigation */}
-      <div className="md:hidden h-20" />
+      <div className="md:hidden h-16" />
     </>
   );
 };

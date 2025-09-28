@@ -25,10 +25,11 @@ export const Header = () => {
   return (
     <header className="bg-card/95 backdrop-blur-md border-b border-border/50 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <Link to="/" className="flex items-center hover-glow">
-            <span className="text-2xl md:text-3xl font-bold text-gaming-glow">MailHub</span>
+          <Link to="/" className="flex items-center space-x-2 hover-glow">
+            <Mail className="w-5 h-5 text-primary" />
+            <span className="text-xl md:text-2xl font-bold text-gaming-glow">MailHub</span>
           </Link>
 
           {/* Navigation */}
