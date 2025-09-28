@@ -80,6 +80,32 @@ export const Mailbox = () => {
 
   return (
     <div className="min-h-screen bg-background flex-1">
+      {/* Promotional Banner */}
+      {showPromoBanner && (
+        <div className="bg-gradient-to-r from-primary/20 to-accent/20 border-b border-primary/30 p-4 relative">
+          <button
+            onClick={handleCloseBanner}
+            className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+          <div className="max-w-7xl mx-auto flex items-center space-x-3">
+            <Gift className="w-8 h-8 text-primary" />
+            <div className="flex-1">
+              <h3 className="font-semibold text-foreground mb-1">Welcome to MailHub 🎉</h3>
+              <p className="text-sm text-muted-foreground">
+                Nikmati inbox cepat & cek promo spesial di store kami!
+              </p>
+            </div>
+            <Link to="/store">
+              <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90">
+                Kunjungi Store
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Single Sticky Header */}
       <header className="bg-card/95 backdrop-blur-md border-b border-border/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -99,7 +125,9 @@ export const Mailbox = () => {
                 <Mail className="w-5 h-5 mr-2" />
                 <span>Mail</span>
                 {stats.unread > 0 && (
-                  <span className="badge-unread ml-2 animate-pulse">{stats.unread}</span>
+                  <Badge variant="secondary" className="ml-2 bg-primary text-primary-foreground">
+                    {stats.unread}
+                  </Badge>
                 )}
               </Link>
               <Link to="/store" className="nav-gaming">

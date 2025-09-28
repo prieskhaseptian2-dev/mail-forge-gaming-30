@@ -1,8 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Bell, Settings, User, Mail, ArrowLeft } from 'lucide-react';
+import { Search, Bell, Settings, User, Mail, ArrowLeft, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface ConsistentHeaderProps {
   showBackToMailbox?: boolean;
@@ -14,7 +20,7 @@ export const ConsistentHeader = ({ showBackToMailbox = true, pageTitle }: Consis
   const { isAuthenticated, logout, user } = useAuth();
 
   const navItems = [
-    { name: 'Mail', path: '/mailbox', icon: Mail, requiresAuth: true },
+    { name: 'Mail', path: '/mailbox', icon: Mail, requiresAuth: true, badge: 4 },
     { name: 'Gaming', path: '/store', icon: null },
     { name: 'Blog', path: '/blog', icon: null },
     { name: 'Community', path: '/community', icon: null },
@@ -57,6 +63,11 @@ export const ConsistentHeader = ({ showBackToMailbox = true, pageTitle }: Consis
                   >
                     {item.icon && <item.icon className="w-5 h-5 mr-2" />}
                     <span>{item.name}</span>
+                    {item.badge && item.badge > 0 && (
+                      <Badge variant="secondary" className="ml-2 bg-primary text-primary-foreground">
+                        {item.badge}
+                      </Badge>
+                    )}
                   </Link>
                 );
               })}
@@ -82,29 +93,32 @@ export const ConsistentHeader = ({ showBackToMailbox = true, pageTitle }: Consis
                 
                 <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
                   <Bell className="w-5 h-5" />
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                  {isAuthenticated && (
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                  )}
                 </Button>
                 <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                   <Settings className="w-5 h-5" />
                 </Button>
                 
                 {isAuthenticated ? (
-                  <div className="flex items-center space-x-2">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="text-muted-foreground hover:text-foreground"
-                    >
-                      <User className="w-5 h-5" />
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      onClick={handleSignOut}
-                      className="text-sm btn-gaming-outline hidden sm:flex"
-                    >
-                      Logout
-                    </Button>
-                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        className="text-muted-foreground hover:text-foreground flex items-center space-x-2"
+                      >
+                        <User className="w-5 h-5" />
+                        <ChevronDown className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem onClick={handleSignOut} className="text-red-600 focus:text-red-600">
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 ) : (
                   <Link to="/login">
                     <Button variant="default" className="btn-gaming text-sm">
