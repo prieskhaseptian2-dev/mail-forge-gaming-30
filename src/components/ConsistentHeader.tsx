@@ -118,29 +118,6 @@ export const ConsistentHeader = ({ showBackToMailbox = true, pageTitle }: Consis
         </div>
       </header>
 
-      {/* Back to Mailbox Navigation - Only for authenticated users on non-mailbox pages */}
-      {showBackToMailbox && isAuthenticated && location.pathname !== '/mailbox' && (
-        <div className="bg-primary/10 border-b border-primary/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center py-2">
-              <Link 
-                to="/mailbox" 
-                className="flex items-center space-x-2 text-primary hover:text-primary-hover transition-colors text-sm font-medium"
-              >
-                <Mail className="w-4 h-4" />
-                <ArrowLeft className="w-4 h-4" />
-                <span>Back to Mailbox</span>
-              </Link>
-              {pageTitle && (
-                <>
-                  <span className="mx-3 text-muted-foreground">•</span>
-                  <span className="text-sm text-muted-foreground">{pageTitle}</span>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
