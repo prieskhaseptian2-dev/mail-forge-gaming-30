@@ -60,35 +60,21 @@ export const MobileNavigation = () => {
     <>
       {/* Minimalist Status Bar - Mobile */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50">
-        <div className="flex items-center justify-between px-4 py-3 text-sm">
-          <div className="flex items-center space-x-3">
-            <span className="text-xl font-bold text-gaming-glow">MailHub</span>
+        <div className="flex items-center justify-between px-4 py-2 text-sm">
+          <div className="flex items-center space-x-2">
+            <span className="text-lg font-bold text-primary">MailHub</span>
             <div className="flex items-center space-x-1">
-              <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
-              <span className={`text-xs font-medium ${isOnline ? 'text-green-500' : 'text-red-500'}`}>
+              <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-primary animate-pulse' : 'bg-muted-foreground'}`}></div>
+              <span className={`text-xs ${isOnline ? 'text-primary' : 'text-muted-foreground'}`}>
                 {isOnline ? 'Online' : 'Offline'}
               </span>
             </div>
           </div>
           
-          {/* Quick Login/Profile Access */}
-          {isAuthenticated ? (
-            <div className="flex items-center space-x-2">
-              {user?.profile?.avatar && (
-                <img
-                  src={user.profile.avatar}
-                  alt="Profile"
-                  className="w-6 h-6 rounded-full border border-border"
-                />
-              )}
-              <span className="text-xs font-medium truncate max-w-20">
-                {user?.name}
-              </span>
-            </div>
-          ) : (
+          {/* Quick Login Access Only */}
+          {!isAuthenticated && (
             <NavLink to="/login">
-              <Button size="sm" variant="ghost" className="h-8 px-2">
-                <LogIn className="w-4 h-4 mr-1" />
+              <Button size="sm" variant="ghost" className="h-7 px-2 text-xs">
                 Sign In
               </Button>
             </NavLink>

@@ -86,18 +86,17 @@ export const Mailbox = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-3">
-                <Mail className="w-8 h-8 text-primary animate-glow" />
-                <h1 className="text-2xl font-bold text-gaming-glow">MailHub</h1>
-                {/* Green Online Status Indicator */}
-                <div className="flex items-center space-x-2">
-                  <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
-                  <Badge variant={isOnline ? "default" : "destructive"} className="text-xs bg-green-500/20 text-green-400 border-green-500/30">
+                <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-primary animate-glow" />
+                <h1 className="text-lg sm:text-2xl font-bold text-primary">MailHub</h1>
+                <div className="hidden sm:flex items-center space-x-2">
+                  <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-primary animate-pulse' : 'bg-muted-foreground'}`}></div>
+                  <span className={`text-xs ${isOnline ? 'text-primary' : 'text-muted-foreground'}`}>
                     {isOnline ? 'Online' : 'Offline'}
-                  </Badge>
+                  </span>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 sm:space-x-4">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -105,29 +104,30 @@ export const Mailbox = () => {
                   disabled={loading}
                   className="hover-glow"
                 >
-                  <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                  <span className="hidden sm:inline">Refresh</span>
+                  <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                  <span className="hidden sm:inline sm:ml-2">Refresh</span>
                 </Button>
                 
-                <div className="flex items-center space-x-2">
+                <div className="hidden sm:flex items-center space-x-2">
                   {user?.profile?.avatar ? (
                     <img
                       src={user.profile.avatar}
                       alt="Profile"
-                      className="w-8 h-8 rounded-full border border-border"
+                      className="w-6 h-6 rounded-full border border-border"
                     />
                   ) : (
-                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-semibold">
+                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-semibold">
                       {user?.name?.charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <span className="text-sm font-medium text-foreground hidden sm:inline">{user?.name}</span>
+                  <span className="text-sm font-medium text-foreground">{user?.name}</span>
                 </div>
                 
                 <Button
                   variant="outline"
+                  size="sm"
                   onClick={handleSignOut}
-                  className="btn-gaming-outline text-sm"
+                  className="btn-gaming-outline text-xs sm:text-sm"
                 >
                   Logout
                 </Button>
@@ -139,33 +139,37 @@ export const Mailbox = () => {
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="space-y-4 sm:space-y-6">
-        {/* Minimalist Promo Banner */}
+        {/* Welcome Promo Banner */}
         {showPromoBanner && (
-          <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-lg p-3 sm:p-4 animate-fade-in">
+          <div className="bg-gradient-to-r from-primary/20 via-primary/10 to-primary/5 border border-primary/30 rounded-xl p-4 sm:p-6 animate-fade-in">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-primary/20 rounded-lg">
-                  <Gift className="w-4 h-4 text-primary" />
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-primary/30 rounded-xl">
+                  <Gift className="w-6 h-6 text-primary" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-foreground">
-                    Welcome to MailHub – Check out our store for exclusive deals!
+                  <h3 className="text-lg font-bold text-foreground mb-1">
+                    Welcome to MailHub 🎉
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Nikmati inbox cepat & cek promo spesial di store kami!
                   </p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 <Link to="/store">
-                  <Button size="sm" variant="outline" className="text-xs hidden sm:flex">
-                    Visit Store
+                  <Button variant="default" className="bg-primary hover:bg-primary/80">
+                    <span className="hidden sm:inline">Kunjungi Store</span>
+                    <span className="sm:hidden">Store</span>
                   </Button>
                 </Link>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleCloseBanner}
-                  className="text-muted-foreground hover:text-foreground p-1"
+                  className="text-muted-foreground hover:text-foreground"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
             </div>
@@ -200,7 +204,7 @@ export const Mailbox = () => {
 
               {/* Email List */}
               <div className="flex-1 lg:col-span-3">
-                <Card className="card-gaming h-[calc(100vh-180px)] sm:h-[calc(100vh-220px)] flex flex-col">
+                <Card className="card-gaming h-[calc(100vh-140px)] sm:h-[calc(100vh-200px)] lg:h-[calc(100vh-220px)] flex flex-col">
                   <CardHeader className="pb-4">
                     <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
                       <CardTitle className="flex items-center space-x-3 text-xl">

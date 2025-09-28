@@ -1,4 +1,4 @@
-import { ExternalLink, Users, MessageSquare, Crown, Gamepad2, Sword, Target, Zap } from 'lucide-react';
+import { ExternalLink, Users, MessageSquare, Crown, Gamepad2, Sword, Target, Zap, Mail } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -113,10 +113,11 @@ export const Community = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      {/* Quick Mailbox Access */}
-      <div className="md:hidden bg-muted/50 border-b border-border px-4 py-2">
-        <Link to="/mailbox" className="text-sm text-primary hover:text-primary-hover">
-          ← Back to Mailbox
+      {/* Quick Navigation */}
+      <div className="bg-muted/50 border-b border-border px-4 py-2">
+        <Link to="/mailbox" className="text-sm text-primary hover:text-primary/80 flex items-center space-x-1">
+          <Mail className="w-4 h-4" />
+          <span>← Back to Mailbox</span>
         </Link>
       </div>
       
