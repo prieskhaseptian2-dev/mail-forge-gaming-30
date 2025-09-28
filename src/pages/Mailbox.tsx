@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import { Link } from 'react-router-dom';
+import { MobileNavigation } from '@/components/MobileNavigation';
 
 export const Mailbox = () => {
   const { user, logout, isOnline } = useAuth();
@@ -78,7 +79,7 @@ export const Mailbox = () => {
   const selectedEmailData = selectedEmail ? emails.find(e => e.id === selectedEmail) : null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex-1">
       {/* Single Sticky Header */}
       <header className="bg-card/95 backdrop-blur-md border-b border-border/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -480,6 +481,7 @@ export const Mailbox = () => {
           </div>
         </div>
       </div>
+      <MobileNavigation />
     </div>
   );
 };

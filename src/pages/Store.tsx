@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { ShoppingCart, Star, Trophy, Users, Clock, Eye, Filter, Mail } from 'lucide-react';
-import { Header } from '@/components/Header';
+import { ShoppingCart, Star, Trophy, Users, Clock, Eye, Filter } from 'lucide-react';
+import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 interface GameAccount {
   id: string;
@@ -122,16 +121,7 @@ export const Store = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
-      {/* Quick Navigation */}
-      <div className="bg-muted/50 border-b border-border px-4 py-2">
-        <Link to="/mailbox" className="text-sm text-primary hover:text-primary/80 flex items-center space-x-1">
-          <Mail className="w-4 h-4" />
-          <span>← Back to Mailbox</span>
-        </Link>
-      </div>
+    <Layout pageTitle="Gaming Store" showBackToMailbox={true}>
       
       {/* Hero Section */}
       <section className="relative bg-gaming-hero py-20 px-4 sm:px-6 lg:px-8">
@@ -294,7 +284,7 @@ export const Store = () => {
           ))}
         </section>
       </div>
-    </div>
+    </Layout>
   );
 };
 

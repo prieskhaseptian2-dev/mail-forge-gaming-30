@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Calendar, Eye, MessageCircle, Filter, Search, Mail } from 'lucide-react';
-import { Header } from '@/components/Header';
+import { Calendar, Eye, MessageCircle, Filter, Search } from 'lucide-react';
+import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 interface BlogPost {
   id: string;
@@ -144,17 +143,7 @@ export const Blog = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
-      {/* Quick Navigation */}
-      <div className="bg-muted/50 border-b border-border px-4 py-2">
-        <Link to="/mailbox" className="text-sm text-primary hover:text-primary/80 flex items-center space-x-1">
-          <Mail className="w-4 h-4" />
-          <span>← Back to Mailbox</span>
-        </Link>
-      </div>
-      
+    <Layout pageTitle="Gaming Blog" showBackToMailbox={true}>
       {/* Hero Section */}
       <section className="relative bg-gaming-hero py-20 px-4 sm:px-6 lg:px-8">
         <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-background/40"></div>
@@ -414,6 +403,6 @@ export const Blog = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
