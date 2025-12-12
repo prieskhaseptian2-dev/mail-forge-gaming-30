@@ -1,82 +1,44 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import api from '@/lib/api';
-
-interface User {
-  id: string;
-  address: string;
-  name: string;
-  profile?: {
-    avatar?: string;
-    lastLogin?: string;
-    preferences?: any;
-  };
-}
+import { supabase } from '@/integrations/supabase/client';
+import type { User, Session } from '@supabase/supabase-js';
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
+  session: Session | null;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (address: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<boolean>;
+  signup: (email: string, password: string, name?: string) => Promise<boolean>;
   logout: () => Promise<void>;
   isOnline: boolean;
-  retryCount: number;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [retryCount, setRetryCount] = useState(0);
   const { toast } = useToast();
 
   useEffect(() => {
-    const checkExistingToken = async () => {
-      try {
-        const existingToken = api.getToken();
-        if (existingToken) {
-          console.log('🔍 Found existing JWT token, testing with messages endpoint...');
-          
-          // Verify token by trying to fetch messages
-          try {
-            const res = await api.getMessages();
-            if (res.success) {
-              // Extract user info from token storage (set during login)
-              const userEmail = localStorage.getItem('user_email') || 'user@example.com';
-              const userData = {
-                id: 'user_id',
-                address: userEmail,
-                name: userEmail.split('@')[0],
-              };
-              setUser(userData);
-              setToken(existingToken);
-              console.log('✅ Token valid, user authenticated:', userEmail);
-            } else {
-              console.log('❌ Token invalid, clearing');
-              api.setToken(null);
-              localStorage.removeItem('user_email');
-            }
-          } catch (error) {
-            console.log('❌ Token verification failed, clearing');
-            api.setToken(null);
-            localStorage.removeItem('user_email');
-          }
-        } else {
-          console.log('❌ No token found');
-        }
-      } catch (e) {
-        console.log('❌ Token verification failed:', e);
-        api.setToken(null);
-      } finally {
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
         setLoading(false);
       }
-    };
+    );
 
-    checkExistingToken();
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
 
     // Network status listeners
     const handleOnline = () => setIsOnline(true);
@@ -86,76 +48,103 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     window.addEventListener('offline', handleOffline);
     
     return () => {
+      subscription.unsubscribe();
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
-  const login = async (address: string, password: string): Promise<boolean> => {
-    setLoading(true);
+  const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const addr = address.trim().toLowerCase();
-      const pwd = password.trim();
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password: password.trim(),
+      });
 
-      console.log('🔐 Attempting login with JWT...');
-      const result = await api.login(addr, pwd);
-
-      if (!result?.success) {
+      if (error) {
+        console.error('Login error:', error);
         toast({
           title: 'Login failed',
-          description: result?.message || 'Invalid credentials',
+          description: error.message,
           variant: 'destructive',
         });
         return false;
       }
 
-      if (result.success && result.user) {
-        // Store user email for session persistence
-        localStorage.setItem('user_email', result.user.address);
-        
-        const userData = {
-          id: result.user.id,
-          address: result.user.address,
-          name: result.user.address.split('@')[0],
-        };
-        setUser(userData);
-        setToken(api.getToken());
-        toast({ title: 'Login successful', description: `Welcome ${userData.address}` });
-        console.log('✅ JWT Login successful for:', userData.address);
+      if (data.user) {
+        toast({ 
+          title: 'Login successful', 
+          description: `Welcome ${data.user.email}` 
+        });
         return true;
       }
 
-      toast({ title: 'Login failed', description: 'Invalid credentials', variant: 'destructive' });
       return false;
     } catch (error) {
-      console.error('❌ Login error:', error);
+      console.error('Login error:', error);
       toast({
         title: 'Login failed',
         description: error instanceof Error ? error.message : 'Unknown error',
         variant: 'destructive',
       });
       return false;
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  const signup = async (email: string, password: string, name?: string): Promise<boolean> => {
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim().toLowerCase(),
+        password: password.trim(),
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            name: name || email.split('@')[0],
+          },
+        },
+      });
+
+      if (error) {
+        console.error('Signup error:', error);
+        toast({
+          title: 'Signup failed',
+          description: error.message,
+          variant: 'destructive',
+        });
+        return false;
+      }
+
+      if (data.user) {
+        toast({ 
+          title: 'Account created!', 
+          description: 'You can now sign in to your account.' 
+        });
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Signup error:', error);
+      toast({
+        title: 'Signup failed',
+        description: error instanceof Error ? error.message : 'Unknown error',
+        variant: 'destructive',
+      });
+      return false;
     }
   };
 
   const logout = async () => {
     try {
-      await api.logout();
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      // Clear all auth state
-      api.setToken(null);
-      localStorage.removeItem('user_email');
-      setUser(null);
-      setToken(null);
-      console.log('✅ Logged out successfully');
+      await supabase.auth.signOut();
       toast({
         title: 'Signed out successfully',
         description: 'You have been logged out of MailHub',
       });
+    } catch (error) {
+      console.error('Logout error:', error);
     }
   };
 
@@ -163,13 +152,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
-        token,
-        isAuthenticated: !!user && !!token,
+        session,
+        isAuthenticated: !!user && !!session,
         loading,
         login,
+        signup,
         logout,
         isOnline,
-        retryCount,
       }}
     >
       {children}

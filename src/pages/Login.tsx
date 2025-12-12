@@ -1,16 +1,28 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
+import { z } from 'zod';
+
+const loginSchema = z.object({
+  email: z.string().trim().email('Invalid email address').max(255, 'Email too long'),
+  password: z.string().trim().min(6, 'Password must be at least 6 characters').max(100, 'Password too long'),
+});
+
+const signupSchema = loginSchema.extend({
+  name: z.string().trim().max(100, 'Name too long').optional(),
+});
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { isAuthenticated, login } = useAuth();
+  const [isSignup, setIsSignup] = useState(false);
+  const { isAuthenticated, login, signup } = useAuth();
 
   if (isAuthenticated) {
     return <Navigate to="/mailbox" replace />;
@@ -21,49 +33,42 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      // Pass email as address to the new API
-      const success = await login(email.trim().toLowerCase(), password.trim());
-      if (success) {
+      // Validate input
+      const schema = isSignup ? signupSchema : loginSchema;
+      const validation = schema.safeParse({ email, password, name: isSignup ? name : undefined });
+      
+      if (!validation.success) {
         toast({
-          title: "Welcome to MailHub! 🎮",
-          description: "Successfully logged into your gaming webmail.",
+          title: 'Validation error',
+          description: validation.error.errors[0].message,
+          variant: 'destructive',
         });
-        // The redirect will happen automatically via the ProtectedRoute
+        setLoading(false);
+        return;
+      }
+
+      if (isSignup) {
+        const success = await signup(email, password, name);
+        if (success) {
+          setIsSignup(false);
+          setPassword('');
+        }
       } else {
-        toast({
-          title: "Login failed",
-          description: "Invalid credentials. Please check your email and password.",
-          variant: "destructive",
-        });
+        const success = await login(email, password);
+        if (success) {
+          toast({
+            title: "Welcome to MailHub! 🎮",
+            description: "Successfully logged into your gaming webmail.",
+          });
+        }
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-      
-      if (errorMessage.includes('Invalid credentials')) {
-        toast({
-          title: "Invalid credentials",
-          description: "Please check your email and password and try again.",
-          variant: "destructive",
-        });
-      } else if (errorMessage.includes('Service unavailable')) {
-        toast({
-          title: "Service unavailable", 
-          description: "The authentication service is temporarily unavailable. Please try again later.",
-          variant: "destructive",
-        });
-      } else if (errorMessage.includes('Network error')) {
-        toast({
-          title: "Connection error",
-          description: "Unable to connect to server. Please check your internet connection and try again.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Login error",
-          description: errorMessage,
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: isSignup ? "Signup error" : "Login error",
+        description: errorMessage,
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -87,15 +92,44 @@ export const Login = () => {
 
           {/* Welcome Message */}
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-2">Welcome Back</h2>
-            <p className="text-muted-foreground">Sign in to access your gaming webmail</p>
-            <div className="mt-4 text-sm text-muted-foreground">
-              Test account: directtest2025@tiffincrane.com / DirectTest123!
-            </div>
+            <h2 className="text-2xl font-semibold text-foreground mb-2">
+              {isSignup ? 'Create Account' : 'Welcome Back'}
+            </h2>
+            <p className="text-muted-foreground">
+              {isSignup ? 'Sign up to access your gaming webmail' : 'Sign in to access your gaming webmail'}
+            </p>
+            {!isSignup && (
+              <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                <p className="text-sm text-foreground font-medium">Demo Admin Account:</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  admin@mailhub.demo / Admin123!
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Login Form */}
+          {/* Login/Signup Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Field (Signup only) */}
+            {isSignup && (
+              <div className="space-y-2">
+                <label htmlFor="name" className="text-sm font-medium text-foreground block text-left">
+                  Name (Optional)
+                </label>
+                <div className="relative">
+                  <User className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    id="name"
+                    type="text"
+                    placeholder="Enter your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="input-gaming pl-10 w-full"
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Email Field */}
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium text-foreground block text-left">
@@ -125,11 +159,12 @@ export const Login = () => {
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
+                  placeholder={isSignup ? 'Create a password (min 6 chars)' : 'Enter your password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="input-gaming pl-10 pr-10 w-full"
                   required
+                  minLength={6}
                 />
                 <button
                   type="button"
@@ -141,7 +176,7 @@ export const Login = () => {
               </div>
             </div>
 
-            {/* Sign In Button */}
+            {/* Submit Button */}
             <Button
               type="submit"
               disabled={loading}
@@ -150,23 +185,31 @@ export const Login = () => {
               {loading ? (
                 <div className="flex items-center space-x-2">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground"></div>
-                  <span>Signing In...</span>
+                  <span>{isSignup ? 'Creating Account...' : 'Signing In...'}</span>
                 </div>
               ) : (
                 <span className="group-hover:scale-105 transition-transform duration-200">
-                  🎮 Sign In to MailHub
+                  🎮 {isSignup ? 'Create Account' : 'Sign In to MailHub'}
                 </span>
               )}
             </Button>
           </form>
 
-          {/* Footer */}
+          {/* Toggle Signup/Login */}
           <div className="mt-8 space-y-4">
             <p className="text-sm text-muted-foreground">
-              Don't have an account?{' '}
-              <span className="text-primary font-medium cursor-pointer hover:underline transition-all duration-200">
-                contact admin
-              </span>
+              {isSignup ? 'Already have an account?' : "Don't have an account?"}{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSignup(!isSignup);
+                  setPassword('');
+                  setName('');
+                }}
+                className="text-primary font-medium cursor-pointer hover:underline transition-all duration-200"
+              >
+                {isSignup ? 'Sign In' : 'Sign Up'}
+              </button>
             </p>
 
             <div className="bg-gaming-subtle rounded-xl p-4 border border-primary/20">
