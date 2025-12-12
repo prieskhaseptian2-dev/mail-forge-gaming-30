@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 export const MobileNavigation = () => {
-  const { isAuthenticated, user, isOnline, retryCount } = useAuth();
+  const { isAuthenticated, user, isOnline } = useAuth();
   const location = useLocation();
   const [unreadCount, setUnreadCount] = useState(5); // This would come from email API
 
